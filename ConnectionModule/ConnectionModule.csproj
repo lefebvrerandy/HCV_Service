@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}</ProjectGuid>
+    <ProjectGuid>{F21628BC-742D-4BC8-BC0F-4BB529861843}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HCV_Class_Library</RootNamespace>
-    <AssemblyName>HCV_Class_Library</AssemblyName>
+    <RootNamespace>ConnectionModule</RootNamespace>
+    <AssemblyName>ConnectionModule</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,12 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionModule.cs" />
-    <Compile Include="HCV.cs" />
-    <Compile Include="HCVDAL.cs" />
-    <Compile Include="IHCVDAL.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HCV_Class_Library\HCV_Class_Library.csproj">
+      <Project>{bbfc3305-07de-47ef-a3a2-1eb0c6b552b7}</Project>
+      <Name>HCV_Class_Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

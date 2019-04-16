@@ -71,5 +71,32 @@ namespace HCV_Class_Library
         //      through the EMS-II GUI as ‘Patient Billable’, and the monthly reporting summary 
         //      should reflect this information. No billing codes that return PUNKO should ever be 
         //      passed to the Ministry of Health through the monthly billing file.
+
+
+        /*****************************/
+        /*      Demographics         */
+        /*****************************/
+        // You must modify your EMS systems demographics to store the most recent HCV status 
+        //      (e.g. VALID, VCODE, PUNKO)
+
+        /*****************************/
+        /*        Billing            */
+        /*****************************/
+        // Your EMS software would be able to check the HCV before you completed the monthly billing file 
+        //      was submitted
+        // It is anticipated that HCV will be run before any billing file would be created,
+        //      thus if VCODE or PUNKO responses are returned from HCV, they could be corrected 
+        //      and confirmed before generating the monthly billing file.
+        // **No billing codes that return PUNKO should ever be passed to the Ministry of Health through
+        //      the monthly billing file.**
+
+        /*****************************/
+        /*          GUI              */
+        /*****************************/
+        // Any billing codes assigned for a patient who returns PUNKO from HCV, should be marked through
+        //      the EMS-II GUI as ‘Patient Billable’, and the monthly reporting summary should reflect
+        //      this information.
+
+
     }
 }

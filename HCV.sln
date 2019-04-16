@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCV_Form", "ServiceForm\HCV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCV_Class_Library", "HCV_Class_Library\HCV_Class_Library.csproj", "{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionModule", "ConnectionModule\ConnectionModule.csproj", "{F21628BC-742D-4BC8-BC0F-4BB529861843}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F21628BC-742D-4BC8-BC0F-4BB529861843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F21628BC-742D-4BC8-BC0F-4BB529861843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F21628BC-742D-4BC8-BC0F-4BB529861843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F21628BC-742D-4BC8-BC0F-4BB529861843}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
