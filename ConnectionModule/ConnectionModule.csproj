@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HCV_Class_Library\HCV_Class_Library.csproj">

@@ -11,14 +11,21 @@ namespace HCV_Class_Library
     {
         public static void Log(string message)
         {
-            EventLog serviceEventLog = new EventLog();
-            if (!EventLog.Exists("HCVLog"))
+            try
             {
-                EventLog.CreateEventSource("HCVSource", "HCVLog");
+                EventLog serviceEventLog = new EventLog();
+                if (!EventLog.Exists("HCVLog"))
+                {
+                    EventLog.CreateEventSource("HCVSource", "HCVLog");
+                }
+                serviceEventLog.Source = "HCVSource";
+                serviceEventLog.Log = "HCVLog";
+                serviceEventLog.WriteEntry(message);
             }
-            serviceEventLog.Source = "HCVSource";
-            serviceEventLog.Log = "HCVLog";
-            serviceEventLog.WriteEntry(message);
+            catch(Exception e)
+            {
+                Debug.Write(e);
+            }
         }
     }
 }
