@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConnectionModule;
+using ConnectionModuleServer;
+using ConnectionModuleClient;
 using HCV_Class_Library;
 using System.Threading;
 
@@ -19,31 +20,33 @@ namespace MethodTestHarness
             //Thread thread[2] = new Thread();
             Thread thServer = new Thread(new ThreadStart(ServerMethod));
             Thread thClient = new Thread(new ThreadStart(ClientMethod));
+            Thread thClient2 = new Thread(new ThreadStart(ClientMethod2));
             thServer.Start();
             thClient.Start();
+            Thread.Sleep(100);
+            thClient2.Start();
+            Thread.Sleep(4000);
+            AsynchronousSocketListener.closeServer = true;
 
-            thServer.Join();
             thClient.Join();
-            Console.WriteLine("Client Sent: {0}", sendingMessage);
-            Console.WriteLine("Server Read: {0}", recievedMessage);
+            thClient2.Join();
+            thServer.Join();
             Console.ReadKey();
 
         }
 
         private static void ServerMethod()
         {
-            Server server = new Server();   // Default params = local
-            server.Connect();
-            recievedMessage = server.Read();
-            server.Close();
+            AsynchronousSocketListener.StartListening();
         }
 
         private static void ClientMethod()
         {
-            Client client = new Client();   // Default params = local
-            client.Connect();
-            client.Write(sendingMessage);
-            client.Close();
+            AsynchronousClient.StartClient("Client One");
+        }
+        private static void ClientMethod2()
+        {
+            AsynchronousClient.StartClient("Client Two");
         }
     }
 }
