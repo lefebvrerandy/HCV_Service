@@ -75,25 +75,25 @@ namespace ConnectionModuleClient
 
         public void SendMessage(string message)
         {
+            Thread.Sleep(100);
             // Send test data to the remote device.  
             string SendingMessage = message + "<EOF>";
             Send(client, SendingMessage);
             sendDone.WaitOne();
+            sendDone.Reset();
+            Thread.Sleep(100);
         }
 
         public string ReceiveMessage()
         {
+            Thread.Sleep(200);
             // Receive the response from the remote device.
             StateObject so = new StateObject();
             so = Receive(client);
             receiveDone.WaitOne();
-
-            // Write the response to the console.  
-            //Console.WriteLine("{0} : Response received : {1}", _className, so.sb);
-            Thread.Sleep(100);
-            string response = so.sb.ToString();
-            Thread.Sleep(100);
-            return response;
+            receiveDone.Reset();
+            Thread.Sleep(200);
+            return so.sb.ToString();
         }
         public void Disconnect()
         {

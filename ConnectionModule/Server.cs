@@ -110,9 +110,9 @@ namespace ConnectionModuleServer
                 {
                     // All the data has been read from the   
                     // client. Display it on the console.  
-                    Console.WriteLine("Read {0} bytes from socket.",
-                        content.Length);
-                    Console.WriteLine("SERVER: {0}", content);
+                    //Console.WriteLine("Read {0} bytes from socket.",
+                    //    content.Length);
+                    //Console.WriteLine("SERVER: {0}", content);
                     // Echo the data back to the client.  
                     Send(handler, content);
                 }
@@ -145,7 +145,7 @@ namespace ConnectionModuleServer
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to client.", bytesSent);
+                //Console.WriteLine("Sent {0} bytes to client.", bytesSent);
             }
             catch (Exception e)
             {
