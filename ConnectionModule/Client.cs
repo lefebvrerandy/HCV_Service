@@ -75,13 +75,13 @@ namespace ConnectionModuleClient
 
         public void SendMessage(string message)
         {
-            Thread.Sleep(100);
+            Thread.Sleep(200);
             // Send test data to the remote device.  
             string SendingMessage = message + "<EOF>";
             Send(client, SendingMessage);
             sendDone.WaitOne();
             sendDone.Reset();
-            Thread.Sleep(100);
+            Thread.Sleep(200);
         }
 
         public string ReceiveMessage()
@@ -93,6 +93,7 @@ namespace ConnectionModuleClient
             receiveDone.WaitOne();
             receiveDone.Reset();
             Thread.Sleep(200);
+            so.sb.Length -= 5;  // We are taking off the EOF we appended earlier
             return so.sb.ToString();
         }
         public void Disconnect()

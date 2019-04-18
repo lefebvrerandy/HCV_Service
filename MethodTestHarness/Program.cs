@@ -25,7 +25,7 @@ namespace MethodTestHarness
             // Client Threads
             int totalThreadsToRun = 100;
             int min = 0;
-            int max = 100;
+            int max = 0;
             Random random1 = new Random();
 
             //-----------------------------------------------------------------
@@ -57,8 +57,6 @@ namespace MethodTestHarness
             //-----------------------------------------------------------------
             //      Testing alot of clients all at once
             //-----------------------------------------------------------------
-            // NOTES:
-            //  Currently can not handle no sleep between spawning client. Must be around 1/10 a second between
             Thread[] clientAlot = new Thread[totalThreadsToRun];
             for (int i = 0; i <= totalThreadsToRun - 1; i++)
             {
@@ -100,7 +98,7 @@ namespace MethodTestHarness
             Console.WriteLine("\n--------------------------------------------");
             Console.WriteLine("\nClient 1 received: {0}\n", client1Response);
             Console.WriteLine("--------------------------------------------\n");
-            if (client1Response != "Test One<EOF>")
+            if (client1Response != "Test One")
             {
                 numberOfErrors1++;
             }
@@ -114,7 +112,7 @@ namespace MethodTestHarness
             Console.WriteLine("\n--------------------------------------------");
             Console.WriteLine("\nClient 2 received: {0}\n", client2Response);
             Console.WriteLine("--------------------------------------------\n");
-            if (client2Response != "Client Two<EOF>")
+            if (client2Response != "Client Two")
             {
                 numberOfErrors2++;
             }
