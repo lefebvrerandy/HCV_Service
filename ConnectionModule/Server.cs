@@ -23,6 +23,7 @@ namespace ConnectionModuleServer
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
         public static bool closeServer = false;
+        private static Socket listener;
 
         public AsynchronousSocketListener()
         {
@@ -38,7 +39,7 @@ namespace ConnectionModuleServer
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
 
             // Create a TCP/IP socket.  
-            Socket listener = new Socket(ipAddress.AddressFamily,
+            listener = new Socket(ipAddress.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
 
             // Bind the socket to the local endpoint and listen for incoming connections.  
@@ -53,25 +54,19 @@ namespace ConnectionModuleServer
                     allDone.Reset();
 
                     // Start an asynchronous socket to listen for connections.  
-                    Console.WriteLine("Waiting for a connection...");
+                    //Console.WriteLine("Waiting for a connection...");
                     listener.BeginAccept(
                         new AsyncCallback(AcceptCallback),
                         listener);
 
                     // Wait until a connection is made before continuing.  
-                    allDone.WaitOne(1000);
+                    allDone.WaitOne();
                 }
-
-                //CloseServer(listener);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
-
-            Console.WriteLine("\nPress ENTER to continue...");
-            Console.Read();
-
         }
 
         public static void AcceptCallback(IAsyncResult ar)
@@ -115,8 +110,9 @@ namespace ConnectionModuleServer
                 {
                     // All the data has been read from the   
                     // client. Display it on the console.  
-                    Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
-                        content.Length, content);
+                    Console.WriteLine("Read {0} bytes from socket.",
+                        content.Length);
+                    Console.WriteLine("SERVER: {0}", content);
                     // Echo the data back to the client.  
                     Send(handler, content);
                 }
@@ -150,9 +146,6 @@ namespace ConnectionModuleServer
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-
-                handler.Shutdown(SocketShutdown.Both);
-                handler.Close();
             }
             catch (Exception e)
             {
@@ -160,10 +153,12 @@ namespace ConnectionModuleServer
             }
         }
 
-        private static void CloseServer(Socket server)
+        public static void Disconnect()
         {
-            server.Shutdown(SocketShutdown.Both);
-            server.Close();
+            closeServer = true;
+            allDone.Set();
+            //listener.Shutdown(SocketShutdown.Both);
+            //listener.Close();
         }
     }
 }

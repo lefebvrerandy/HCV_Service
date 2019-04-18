@@ -17,6 +17,7 @@ namespace ConnectionModuleClient
         public byte[] buffer = new byte[BufferSize];
         // Received data string.  
         public StringBuilder sb = new StringBuilder();
+
     }
 
     public class AsynchronousClient
@@ -32,10 +33,19 @@ namespace ConnectionModuleClient
         private static ManualResetEvent receiveDone =
             new ManualResetEvent(false);
 
+        Socket client;
+
         // The response from the remote device.  
         private static String response = String.Empty;
 
-        public static void StartClient(string message)
+        private string _className;
+
+        public AsynchronousClient(string className)
+        {
+            _className = className;
+        }
+
+        public void StartClient(string IPAddress)
         {
             // Connect to a remote device.  
             try
@@ -43,12 +53,12 @@ namespace ConnectionModuleClient
                 // Establish the remote endpoint for the socket.  
                 // The name of the   
                 // remote device is "host.contoso.com".  
-                IPHostEntry ipHostInfo = Dns.GetHostEntry("127.0.0.1");
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(IPAddress);
                 IPAddress ipAddress = ipHostInfo.AddressList[0];
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.  
-                Socket client = new Socket(ipAddress.AddressFamily,
+                client = new Socket(ipAddress.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
 
                 // Connect to the remote endpoint.  
@@ -56,27 +66,40 @@ namespace ConnectionModuleClient
                     new AsyncCallback(ConnectCallback), client);
                 connectDone.WaitOne();
 
-                // Send test data to the remote device.  
-                string SendingMessage = message + "<EOF>";
-                Send(client, SendingMessage);
-                sendDone.WaitOne();
-
-                // Receive the response from the remote device.  
-                Receive(client);
-                receiveDone.WaitOne();
-
-                // Write the response to the console.  
-                Console.WriteLine("Response received : {0}", response);
-
-                // Release the socket.  
-                client.Shutdown(SocketShutdown.Both);
-                client.Close();
-
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        public void SendMessage(string message)
+        {
+            // Send test data to the remote device.  
+            string SendingMessage = message + "<EOF>";
+            Send(client, SendingMessage);
+            sendDone.WaitOne();
+        }
+
+        public string ReceiveMessage()
+        {
+            // Receive the response from the remote device.
+            StateObject so = new StateObject();
+            so = Receive(client);
+            receiveDone.WaitOne();
+
+            // Write the response to the console.  
+            //Console.WriteLine("{0} : Response received : {1}", _className, so.sb);
+            Thread.Sleep(100);
+            string response = so.sb.ToString();
+            Thread.Sleep(100);
+            return response;
+        }
+        public void Disconnect()
+        {
+            // Release the socket.  
+            client.Shutdown(SocketShutdown.Both);
+            client.Close();
         }
 
         private static void ConnectCallback(IAsyncResult ar)
@@ -97,18 +120,17 @@ namespace ConnectionModuleClient
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("Server is currently offline");
             }
         }
 
-        private static void Receive(Socket client)
+        private static StateObject Receive(Socket client)
         {
+            // Create the state object.  
+            StateObject state = new StateObject();
+            state.workSocket = client;
             try
             {
-                // Create the state object.  
-                StateObject state = new StateObject();
-                state.workSocket = client;
-
                 // Begin receiving the data from the remote device.  
                 client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallback), state);
@@ -118,15 +140,16 @@ namespace ConnectionModuleClient
             {
                 Console.WriteLine(e.ToString());
             }
+            return state;
         }
 
         private static void ReceiveCallback(IAsyncResult ar)
         {
+            StateObject state = (StateObject)ar.AsyncState;
             try
             {
                 // Retrieve the state object and the client socket   
                 // from the asynchronous state object.  
-                StateObject state = (StateObject)ar.AsyncState;
                 Socket client = state.workSocket;
 
                 // Read data from the remote device.  
@@ -136,21 +159,14 @@ namespace ConnectionModuleClient
                 {
                     // There might be more data, so store the data received so far.  
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-
-                    // Get the rest of the data.  
-                    client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                        new AsyncCallback(ReceiveCallback), state);
+                    receiveDone.Set();
                 }
                 else
                 {
-                    // All the data has arrived; put it in response.  
-                    if (state.sb.Length > 1)
-                    {
-                        response = state.sb.ToString();
-                    }
-                    // Signal that all bytes have been received.  
+                    // Get the rest of the data.  
+                    client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                        new AsyncCallback(ReceiveCallback), state);
                     Thread.Sleep(100);
-                    receiveDone.Set();
                 }
             }
             catch (Exception e)
@@ -178,7 +194,7 @@ namespace ConnectionModuleClient
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+                //Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();

@@ -12,24 +12,22 @@ namespace MethodTestHarness
 {
     class Program
     {
-        static String sendingMessage = "Hello From Client";
-        static String recievedMessage = String.Empty;
-
         static void Main(string[] args)
         {
-            //Thread thread[2] = new Thread();
             Thread thServer = new Thread(new ThreadStart(ServerMethod));
             Thread thClient = new Thread(new ThreadStart(ClientMethod));
             Thread thClient2 = new Thread(new ThreadStart(ClientMethod2));
             thServer.Start();
+            Thread.Sleep(4000);
             thClient.Start();
-            Thread.Sleep(100);
+            //Thread.Sleep(100);
             thClient2.Start();
             Thread.Sleep(4000);
-            AsynchronousSocketListener.closeServer = true;
+
 
             thClient.Join();
             thClient2.Join();
+            AsynchronousSocketListener.Disconnect();
             thServer.Join();
             Console.ReadKey();
 
@@ -42,11 +40,23 @@ namespace MethodTestHarness
 
         private static void ClientMethod()
         {
-            AsynchronousClient.StartClient("Client One");
+            AsynchronousClient client1 = new AsynchronousClient("client1");
+            client1.StartClient("127.0.0.1");
+            client1.SendMessage("Test One");
+            string client1Response = client1.ReceiveMessage();
+            Console.WriteLine("\n--------------------------------------------");
+            Console.WriteLine("\nClient 1 received: {0}\n", client1Response);
+            Console.WriteLine("--------------------------------------------\n");
         }
         private static void ClientMethod2()
         {
-            AsynchronousClient.StartClient("Client Two");
+            AsynchronousClient client2 = new AsynchronousClient("client2");
+            client2.StartClient("127.0.0.1");
+            client2.SendMessage("Client Two");
+            string client2Response = client2.ReceiveMessage();
+            Console.WriteLine("\n--------------------------------------------");
+            Console.WriteLine("\nClient 2 received: {0}\n", client2Response);
+            Console.WriteLine("--------------------------------------------\n");
         }
     }
 }
