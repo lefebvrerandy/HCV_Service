@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -108,13 +109,38 @@ namespace ConnectionModuleServer
                 content = state.sb.ToString();
                 if (content.IndexOf("<EOF>") > -1)
                 {
-                    // All the data has been read from the   
-                    // client. Display it on the console.  
-                    //Console.WriteLine("Read {0} bytes from socket.",
-                    //    content.Length);
-                    //Console.WriteLine("SERVER: {0}", content);
-                    // Echo the data back to the client.  
-                    Send(handler, content);
+                    // Must be in one of three options
+                    // RUSS' EXPLANATION ON THE THREE
+                    //      VALID                       - Valid health card,
+                    //      VCODE                       - Incorrect two-character version code (thus will be declined by MoH during billing)
+                    //      PUNKO                       - Patient unknown error (also will not be paid by MoH).
+
+                    string[] newString = new string[100];
+                    newString[0] = "PUNKO";
+                    string returningString = "PUNKO";
+
+                    // Check what the call is and what the client is trying to do
+                    if (content.IndexOf("GET") > -1)    // Get a single entry
+                    {
+                        // Send the recieved data into the Get method and return the results into a string array
+                        newString = Get(content);
+                        returningString = ConcatReturn(newString);
+
+                        // Send the newly created string with the list of results
+                        Send(handler, returningString);
+                    }
+                    else if (content.IndexOf("SET") > -1)   // Update a single entry
+                    {
+                        returningString = Set(content);
+
+                        Send(handler, returningString);
+                    }
+                    else
+                    {
+                        returningString = "ERROR";
+                        Send(handler, returningString);
+                    }
+
                 }
                 else
                 {
@@ -159,6 +185,99 @@ namespace ConnectionModuleServer
             allDone.Set();
             //listener.Shutdown(SocketShutdown.Both);
             //listener.Close();
+        }
+
+        private static string[] Get(string content)
+        {
+            HCV_Class_Library.HCVDAL dal = new HCV_Class_Library.HCVDAL();
+            HCV_Class_Library.HCV hcv = new HCV_Class_Library.HCV(dal);
+            List<HCV_Class_Library.HCVPatient> patient = new List<HCV_Class_Library.HCVPatient>();
+            HCV_Class_Library.HCVStringManipulation adapter = new HCV_Class_Library.HCVStringManipulation();
+
+
+            // Set up the main string by removing the beginning and ending flags
+            // split the main string into a group of patient strings
+            content = adapter.TearOffBeginningAndEnd(content);
+            string[] patientList = content.Split('/');
+
+            // Create a string of only health card numbers we are looking for
+            // AKA. Trim off vcode and postal code for each string
+            string[] HealthCardOnly = new string[patientList.Length];
+            for (int i = 0; i < patientList.Length; i++)
+            {
+                HealthCardOnly[i] = adapter.TearOffVCodeAndPostal(patientList[i]); 
+            }
+
+            // Get the list of patients 
+            // Recombine the patient strings for comparing
+            patient = hcv.GetHCVPatient(HealthCardOnly);         
+            string[] FoundPatient = adapter.ConstructCompareString(patient);
+            string[] returningString = new string[patientList.Length];
+
+            // Compare each string to what we recieved to what we found and create a list
+            // of results
+            for (int i = 0; i < patientList.Length; i++)
+            {
+                if (FoundPatient[i] == patientList[i])
+                {
+                    returningString[i] = "VALID";
+                }
+                else if (FoundPatient[i].IndexOf(HealthCardOnly[i]) > -1)
+                {
+                    returningString[i] = "VCODE";
+                }
+                else
+                {
+                    returningString[i] = "PUNKO";
+                }
+            }
+            return returningString;
+        }
+
+        private static string Set(string content)
+        {
+            string returningString = "ERROR";
+            HCV_Class_Library.HCVDAL dal = new HCV_Class_Library.HCVDAL();
+            HCV_Class_Library.HCVPatient patient = new HCV_Class_Library.HCVPatient();
+            HCV_Class_Library.HCV hcv = new HCV_Class_Library.HCV(dal);
+            HCV_Class_Library.HCVStringManipulation adapter = new HCV_Class_Library.HCVStringManipulation();
+
+            // Trim the beginning and ending label
+            // Split the contents into 3 sections: HCN, VCode, PostalCode
+            content = adapter.TearOffBeginningAndEnd(content);
+            string[] patientInfo = content.Split(',');
+
+
+            // Find the HCVPatient
+            patient = hcv.GetHCVPatient(patientInfo[0]);
+            if (patient != null)
+            {
+                patient = hcv.CreateHCVPatient(patientInfo[0], patientInfo[1], patientInfo[2]);
+                if (hcv.UpdateHCVPatient(patientInfo[0], patient))
+                {
+                    returningString = "VALID";
+                }
+            }
+            return returningString;
+        }
+
+        // Append all the results into a single string for sending back to the client
+        private static string ConcatReturn(string[] newString)
+        {
+            string returningString = "";
+            for (int i = 0; i < newString.Length; i++)
+            {
+                if (newString[i] != "")
+                {
+                    if (returningString != "")
+                    {
+                        returningString += ",";
+                    }
+                    returningString += newString[i];
+                }
+            }
+            return returningString;
+
         }
     }
 }

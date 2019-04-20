@@ -93,7 +93,6 @@ namespace ConnectionModuleClient
             receiveDone.WaitOne();
             receiveDone.Reset();
             Thread.Sleep(200);
-            so.sb.Length -= 5;  // We are taking off the EOF we appended earlier
             return so.sb.ToString();
         }
         public void Disconnect()

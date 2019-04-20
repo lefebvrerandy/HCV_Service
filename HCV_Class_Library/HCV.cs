@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace HCV_Class_Library
 {
-    class HCV
+    public class HCV
     {
         /*****************************/
         /*           Class           */
@@ -97,6 +98,103 @@ namespace HCV_Class_Library
         //      the EMS-II GUI as ‘Patient Billable’, and the monthly reporting summary should reflect
         //      this information.
 
+
+        private readonly IHCVDAL _dal;
+
+        public HCV(IHCVDAL dal)
+        {
+            _dal = dal;
+        }
+
+        public List<HCVPatient> GetHCVPatient(string[] HCN)
+        {
+            return _dal.GetHCVPatient(HCN);
+        }
+        public HCVPatient GetHCVPatient(string HCN)
+        {
+            return _dal.GetHCVPatient(HCN);
+        }
+
+        public bool AddHCVPatient(HCVPatient newHCVpatient)
+        {
+            return _dal.AddHCVPatient(newHCVpatient);
+        }
+
+        public bool UpdateHCVPatient(string HCN, HCVPatient newHCVpatient)
+        {
+            return _dal.UpdateHCVPatient(HCN, newHCVpatient);
+        }
+
+        public HCVPatient CreateHCVPatient(string newHCN, string newVCode, string newpostalCode)
+        {
+            bool retCode = true;
+            // Validate the parameters
+            // Validate the new healthcard number
+            if (newHCN.Length == 10)
+            {
+                foreach (char c in newHCN)
+                {
+                    if (c < '0' || c > '9')
+                    {
+                        retCode = false;
+                    }
+                }
+            }
+            else
+            {
+                retCode = false;
+            }
+
+            // Validate the VCode
+            if (newVCode.Length == 2)
+            {
+                bool FoundMatch = false;
+                FoundMatch = Regex.IsMatch(newVCode, @"^[a-zA-Z]+$");
+                if (!FoundMatch)
+                    retCode = false;
+            }
+            else
+            {
+                retCode = false;
+            }
+
+            // Validate the Postal Code
+            if ((newpostalCode.Length == 6) || (newpostalCode.Length == 7))
+            {
+                bool FoundMatch = false;
+                try
+                {
+                    FoundMatch = Regex.IsMatch(newpostalCode, "[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ] ?[0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]");
+                    if (!FoundMatch)
+                        retCode = false;
+                }
+                catch (ArgumentException)
+                {
+                    retCode = false;
+                }
+            }
+            else
+            {
+                retCode = false;
+            }
+
+
+            HCVPatient newHCVPatient;
+            if (retCode)
+            {
+                newHCVPatient = new HCVPatient
+                {
+                    HealthCardNumber = newHCN,
+                    VCode = newVCode,
+                    PostalCode = newpostalCode
+                };
+            }
+            else
+            {
+                newHCVPatient = null;
+            }
+            return newHCVPatient;
+        }
 
     }
 }
