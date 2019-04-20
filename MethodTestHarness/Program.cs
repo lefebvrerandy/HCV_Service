@@ -144,7 +144,8 @@ namespace MethodTestHarness
         // Works
         private static void ServerMethod()
         {
-            AsynchronousSocketListener.StartListening();
+            AsynchronousSocketListener server = new AsynchronousSocketListener();
+            server.StartListening();
         }
 
         // Works

@@ -30,7 +30,7 @@ namespace ConnectionModuleServer
         {
         }
 
-        public static void StartListening()
+        public void StartListening()
         {
             // Establish the local endpoint for the socket.  
             // The DNS name of the computer  
@@ -116,15 +116,16 @@ namespace ConnectionModuleServer
                     //      PUNKO                       - Patient unknown error (also will not be paid by MoH).
 
                     string[] newString = new string[100];
-                    newString[0] = "PUNKO";
                     string returningString = "PUNKO";
 
                     // Check what the call is and what the client is trying to do
                     if (content.IndexOf("GET") > -1)    // Get a single entry
                     {
+                        HCV_Class_Library.HCVStringManipulation adapter = new HCV_Class_Library.HCVStringManipulation();
+                        newString[0] = "PUNKO";
                         // Send the recieved data into the Get method and return the results into a string array
                         newString = Get(content);
-                        returningString = ConcatReturn(newString);
+                        returningString = adapter.ConcatReturn(newString);
 
                         // Send the newly created string with the list of results
                         Send(handler, returningString);
@@ -171,7 +172,6 @@ namespace ConnectionModuleServer
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
-                //Console.WriteLine("Sent {0} bytes to client.", bytesSent);
             }
             catch (Exception e)
             {
@@ -183,8 +183,6 @@ namespace ConnectionModuleServer
         {
             closeServer = true;
             allDone.Set();
-            //listener.Shutdown(SocketShutdown.Both);
-            //listener.Close();
         }
 
         private static string[] Get(string content)
@@ -252,6 +250,8 @@ namespace ConnectionModuleServer
             patient = hcv.GetHCVPatient(patientInfo[0]);
             if (patient != null)
             {
+                // Create a new HCVPatient
+                // Update the HCVDatabase with the new patient information
                 patient = hcv.CreateHCVPatient(patientInfo[0], patientInfo[1], patientInfo[2]);
                 if (hcv.UpdateHCVPatient(patientInfo[0], patient))
                 {
@@ -259,25 +259,6 @@ namespace ConnectionModuleServer
                 }
             }
             return returningString;
-        }
-
-        // Append all the results into a single string for sending back to the client
-        private static string ConcatReturn(string[] newString)
-        {
-            string returningString = "";
-            for (int i = 0; i < newString.Length; i++)
-            {
-                if (newString[i] != "")
-                {
-                    if (returningString != "")
-                    {
-                        returningString += ",";
-                    }
-                    returningString += newString[i];
-                }
-            }
-            return returningString;
-
         }
     }
 }

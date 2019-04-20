@@ -83,5 +83,22 @@ namespace HCV_Class_Library
 
             return finalStringArray;
         }
+
+        public string ConcatReturn(string[] newString)
+        {
+            string returningString = "";
+            for (int i = 0; i < newString.Length; i++)
+            {
+                if (newString[i] != "")
+                {
+                    if (returningString != "")
+                    {
+                        returningString += ",";
+                    }
+                    returningString += newString[i];
+                }
+            }
+            return returningString;
+        }
     }
 }

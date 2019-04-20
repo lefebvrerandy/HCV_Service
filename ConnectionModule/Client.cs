@@ -38,11 +38,11 @@ namespace ConnectionModuleClient
         // The response from the remote device.  
         private static String response = String.Empty;
 
-        private string _className;
+        private string _hostName;
 
-        public AsynchronousClient(string className)
+        public AsynchronousClient(string hostName = "")
         {
-            _className = className;
+            _hostName = hostName;
         }
 
         public void StartClient(string IPAddress)
@@ -194,7 +194,6 @@ namespace ConnectionModuleClient
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
-                //Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
