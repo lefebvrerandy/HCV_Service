@@ -70,23 +70,25 @@ namespace HCV_Class_Library
             var result = _context.HCVPatients.SingleOrDefault(x => x.HealthCardNumber == HCN);
             if (result != null)
             {
-                // Update the row with the new information
-                // each row will have the three columns (HCN, VCode, PostalCode) updated
-                if (newHCVpatient.HealthCardNumber != "" && newHCVpatient.HealthCardNumber != null)
+                if (newHCVpatient != null)
                 {
-                    result.HealthCardNumber = newHCVpatient.HealthCardNumber;
+                    // Update the row with the new information
+                    // each row will have the three columns (HCN, VCode, PostalCode) updated
+                    if (newHCVpatient.HealthCardNumber != "" && newHCVpatient.HealthCardNumber != null)
+                    {
+                        result.HealthCardNumber = newHCVpatient.HealthCardNumber;
+                    }
+                    if (newHCVpatient.VCode != "" && newHCVpatient.VCode != null)
+                    {
+                        result.VCode = newHCVpatient.VCode;
+                    }
+                    if (newHCVpatient.PostalCode != "" && newHCVpatient.PostalCode != null)
+                    {
+                        result.PostalCode = newHCVpatient.PostalCode;
+                    }
+                    _context.SaveChanges();
+                    retCode = true;
                 }
-                if (newHCVpatient.VCode != "" && newHCVpatient.VCode != null)
-                {
-                    result.VCode = newHCVpatient.VCode;
-                }
-                if (newHCVpatient.PostalCode != "" && newHCVpatient.PostalCode != null)
-                {
-                    result.PostalCode = newHCVpatient.PostalCode;
-                }
-
-                _context.SaveChanges();
-                retCode = true;
             }
 
             return retCode;

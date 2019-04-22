@@ -1,6 +1,6 @@
-﻿namespace ServerService
+﻿namespace HCV_Service
 {
-    partial class Service1
+    partial class HCVService
     {
         /// <summary> 
         /// Required designer variable.

@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 
-namespace ConnectionModuleClient
+namespace EMS
 {
     // State object for receiving data from remote device.  
     public class StateObject
@@ -34,6 +34,8 @@ namespace ConnectionModuleClient
             new ManualResetEvent(false);
 
         Socket client;
+
+        public static bool connected;
 
         // The response from the remote device.  
         private static String response = String.Empty;
@@ -95,6 +97,7 @@ namespace ConnectionModuleClient
             Thread.Sleep(200);
             return so.sb.ToString();
         }
+
         public void Disconnect()
         {
             // Release the socket.  
@@ -115,13 +118,16 @@ namespace ConnectionModuleClient
                 Console.WriteLine("Socket connected to {0}",
                     client.RemoteEndPoint.ToString());
 
-                // Signal that the connection has been made.  
-                connectDone.Set();
+                connected = true;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Server is currently offline");
+                connected = false;
             }
+
+            // Signal that the connection has been made.  
+            connectDone.Set();
         }
 
         private static StateObject Receive(Socket client)
@@ -154,7 +160,7 @@ namespace ConnectionModuleClient
 
                 // Read data from the remote device.  
                 int bytesRead = client.EndReceive(ar);
-                
+
                 if (bytesRead > 0)
                 {
                     // There might be more data, so store the data received so far.  
@@ -202,6 +208,11 @@ namespace ConnectionModuleClient
             {
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        internal bool IsConnected()
+        {
+            return connected;
         }
     }
 }

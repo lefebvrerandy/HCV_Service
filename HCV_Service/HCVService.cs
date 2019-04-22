@@ -2,32 +2,33 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+using System.Diagnostics;
 using System.Linq;
+using System.ServiceProcess;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Threading;
+using System.Threading.Tasks;
+using ConnectionModuleServer;
 using HCV_Class_Library;
 
-namespace ServiceForm
+namespace HCV_Service
 {
-    public partial class Form1 : Form
+    public partial class HCVService : ServiceBase
     {
         Thread _serverThread;
-        public Form1()
+        public HCVService()
         {
             InitializeComponent();
         }
 
-        private void btn_Start_Click(object sender, EventArgs e)
+        protected override void OnStart(string[] args)
         {
             _serverThread = new Thread(new ThreadStart(ServerMethod));
             Logger.Log("Server Started");
             _serverThread.Start();
         }
 
-        private void btn_Stop_Click(object sender, EventArgs e)
+        protected override void OnStop()
         {
             Logger.Log("Server Stopping");
             AsynchronousSocketListener.Disconnect();
@@ -43,3 +44,4 @@ namespace ServiceForm
         }
     }
 }
+

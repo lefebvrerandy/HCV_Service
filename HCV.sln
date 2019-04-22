@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCV_Service", "ServerService\HCV_Service.csproj", "{5C620FA8-EF1F-4C68-B960-E6819AA6CE64}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCV_Form", "ServiceForm\HCV_Form.csproj", "{8EC5F991-F78C-4109-9A08-16CA9919B101}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCV_Class_Library", "HCV_Class_Library\HCV_Class_Library.csproj", "{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionModule", "ConnectionModule\ConnectionModule.csproj", "{F21628BC-742D-4BC8-BC0F-4BB529861843}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodTestHarness", "MethodTestHarness\MethodTestHarness.csproj", "{486103F6-2A11-4C25-86C1-F4DB3806F165}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HCVAdapter", "HCVAdapter\HCVAdapter.csproj", "{102AC0F2-69C3-4188-8141-5BD56C6F3C56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HCVService", "HCVService\HCVService.csproj", "{619E7412-2ED6-4FCC-9F9B-75D45E9E2130}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5C620FA8-EF1F-4C68-B960-E6819AA6CE64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C620FA8-EF1F-4C68-B960-E6819AA6CE64}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C620FA8-EF1F-4C68-B960-E6819AA6CE64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C620FA8-EF1F-4C68-B960-E6819AA6CE64}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8EC5F991-F78C-4109-9A08-16CA9919B101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8EC5F991-F78C-4109-9A08-16CA9919B101}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EC5F991-F78C-4109-9A08-16CA9919B101}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -31,14 +27,18 @@ Global
 		{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBFC3305-07DE-47EF-A3A2-1EB0C6B552B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F21628BC-742D-4BC8-BC0F-4BB529861843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F21628BC-742D-4BC8-BC0F-4BB529861843}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F21628BC-742D-4BC8-BC0F-4BB529861843}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F21628BC-742D-4BC8-BC0F-4BB529861843}.Release|Any CPU.Build.0 = Release|Any CPU
 		{486103F6-2A11-4C25-86C1-F4DB3806F165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{486103F6-2A11-4C25-86C1-F4DB3806F165}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{486103F6-2A11-4C25-86C1-F4DB3806F165}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{486103F6-2A11-4C25-86C1-F4DB3806F165}.Release|Any CPU.Build.0 = Release|Any CPU
+		{102AC0F2-69C3-4188-8141-5BD56C6F3C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{102AC0F2-69C3-4188-8141-5BD56C6F3C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{102AC0F2-69C3-4188-8141-5BD56C6F3C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{102AC0F2-69C3-4188-8141-5BD56C6F3C56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{619E7412-2ED6-4FCC-9F9B-75D45E9E2130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{619E7412-2ED6-4FCC-9F9B-75D45E9E2130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{619E7412-2ED6-4FCC-9F9B-75D45E9E2130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{619E7412-2ED6-4FCC-9F9B-75D45E9E2130}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -58,9 +58,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConnectionModule\ConnectionModule.csproj">
-      <Project>{f21628bc-742d-4bc8-bc0f-4bb529861843}</Project>
-      <Name>ConnectionModule</Name>
+    <ProjectReference Include="..\HCVAdapter\HCVAdapter.csproj">
+      <Project>{102ac0f2-69c3-4188-8141-5bd56c6f3c56}</Project>
+      <Name>HCVAdapter</Name>
     </ProjectReference>
     <ProjectReference Include="..\HCV_Class_Library\HCV_Class_Library.csproj">
       <Project>{bbfc3305-07de-47ef-a3a2-1eb0c6b552b7}</Project>

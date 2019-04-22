@@ -56,26 +56,6 @@
             this.btn_Stop.UseVisualStyleBackColor = true;
             this.btn_Stop.Click += new System.EventHandler(this.btn_Stop_Click);
             // 
-            // btn_Continue
-            // 
-            this.btn_Continue.Location = new System.Drawing.Point(403, 183);
-            this.btn_Continue.Name = "btn_Continue";
-            this.btn_Continue.Size = new System.Drawing.Size(145, 53);
-            this.btn_Continue.TabIndex = 2;
-            this.btn_Continue.Text = "Continue";
-            this.btn_Continue.UseVisualStyleBackColor = true;
-            this.btn_Continue.Click += new System.EventHandler(this.btn_Continue_Click);
-            // 
-            // btn_Pause
-            // 
-            this.btn_Pause.Location = new System.Drawing.Point(570, 183);
-            this.btn_Pause.Name = "btn_Pause";
-            this.btn_Pause.Size = new System.Drawing.Size(145, 53);
-            this.btn_Pause.TabIndex = 3;
-            this.btn_Pause.Text = "Pause";
-            this.btn_Pause.UseVisualStyleBackColor = true;
-            this.btn_Pause.Click += new System.EventHandler(this.btn_Pause_Click);
-            // 
             // tb_Information
             // 
             this.tb_Information.Location = new System.Drawing.Point(71, 276);
